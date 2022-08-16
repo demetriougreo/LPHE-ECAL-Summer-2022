@@ -1,0 +1,33 @@
+## THIS SECTION INTRODUCES ALL THE MODULES THAT WOULD BE USED DURING THE EXECUTION OF THE SCRIPT ##
+
+import uproot
+import uproot3
+import numpy as np
+import pandas as pd # PANDAS IS EXTREMELY USEFUL AS IT IS RESPONSIBLE FOR DEALING WITH THE DATABASE FILES
+import sys
+from matplotlib import pyplot as plt # USED FOR THE PRODUCTION OF IMAGE PLOTS
+import mplhep as hep
+from itertools import combinations
+from matplotlib import pyplot as plt
+import mplhep as hep
+from vpython import * # USED FOR THE ANIMATION EVOLUTION OF THE SYSTEM
+from time import *
+import turtle
+from mpl_toolkits.mplot3d import Axes3D
+plt.style.use([hep.style.LHCb])
+
+## FUNCTIONS 
+
+filepath='/home/ecal/Documents/scripts/Analysis/ECAL_SiPM_mapping.xlsx'
+def same_layer(data,data2):
+    position=pd.read_excel(filepath)
+    channel=position['Channel']
+    TOFPET=position['TOFPET']
+    size=len(data)
+    data2_internal=data2%2
+    layer=np.zeros((size,),dtype=int)
+    for i in range(size):
+        layer[i]=position.loc[(channel== data[i]) & (TOFPET == data2_internal[i])]['Layer']
+        if data2[i] == 4 or data2[i] == 5 or data2[i] == 6 or data2[i] == 7:
+            layer[i]=layer[i]+4
+    return layer
